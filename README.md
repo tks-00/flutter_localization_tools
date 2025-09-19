@@ -2,10 +2,6 @@
 
 Flutter/Dart プロジェクトの多言語化対応を支援するツール集です。
 
-## 概要
-
-このリポジトリには、Flutter アプリの国際化（i18n）とローカライゼーション（l10n）を効率的に管理するための 2 つのツールが含まれています。日本語・英語の 2 言語対応を想定したシンプルな構成になっています。
-
 ## ツール
 
 ### 1. 日本語ハードコード文字列検出ツール (`find_japanese_hardcoded_strings.dart`)
@@ -23,7 +19,7 @@ Dart プロジェクト内の日本語でハードコードされた文字列を
 #### 使用方法
 
 ```bash
-dart run tools/find_japanese_hardcoded_strings.dart
+fvm dart run tools/find_japanese_hardcoded_strings.dart
 ```
 
 #### 実行例
@@ -63,29 +59,49 @@ dart run tools/find_japanese_hardcoded_strings.dart
 #### 使用方法
 
 ```bash
-dart run tools/check_arb_keys.dart
+fvm dart run tools/check_arb_keys.dart
 ```
 
 #### 実行例
 
 ```
-EN: 12 keys
-JA: 12 keys
+EN: 2個のキー
+JA: 2個のキー
 
 ============================================================
-Total unique keys: 14
+合計キー数: 3
 
 ============================================================
-Missing keys by language:
+言語別の不足キー:
 ============================================================
 
-EN missing 2 keys:
-  - missingInEnglish
-  - onlyJapanese
+EN に不足している1個のキー:
+  - banana
 
-JA missing 2 keys:
-  - missingInJapanese
-  - onlyEnglish
+JA に不足している1個のキー:
+  - grape
+
+============================================================
+一部の言語にのみ存在するキー:
+============================================================
+
+'banana':
+  存在する言語: JA
+  不足している言語: EN
+
+'grape':
+  存在する言語: EN
+  不足している言語: JA
+
+============================================================
+詳細統計:
+============================================================
+
+EN 固有キー (1個):
+  - grape
+
+JA 固有キー (1個):
+  - banana
 ```
 
 ## プロジェクト構成
@@ -108,7 +124,7 @@ tools/
 
 ### 日本語検出ツールの設定
 
-`find_japanese_hardcoded_strings.dart` 内の `defaultConfig` で設定を変更できます：
+`find_japanese_hardcoded_strings.dart` 内の `defaultConfig` で設定を変更できます。
 
 ```dart
 const defaultConfig = JapaneseDetectorConfig(
@@ -122,7 +138,7 @@ const defaultConfig = JapaneseDetectorConfig(
 
 ### ARB キー比較ツールの設定
 
-`check_arb_keys.dart` 内の `files` で対象言語を変更できます：
+`check_arb_keys.dart` 内の `files` で対象言語を変更できます。
 
 ```dart
 final files = {
@@ -131,12 +147,46 @@ final files = {
 };
 ```
 
-## デモアプリの実行
+## セットアップ
 
-サンプルファイルを含むデモアプリを実行できます：
+### 1. リポジトリのクローン
 
 ```bash
-flutter run
+git clone https://github.com/[your-username]/flutter_localization_tools.git
+cd flutter_localization_tools
+```
+
+### 2. FVM のセットアップ
+
+このプロジェクトでは FVM を使用して Flutter バージョンを管理しています。
+
+```bash
+# FVM のインストール
+dart pub global activate fvm
+
+# Flutter バージョンのインストールと設定
+fvm install 3.29.0
+fvm use 3.29.0
+```
+
+### 3. 依存関係のインストール
+
+```bash
+fvm flutter pub get
+```
+
+### 4. 多言語化ファイルの生成
+
+```bash
+fvm flutter gen-l10n
+```
+
+## デモアプリの実行
+
+サンプルファイルを含むデモアプリを実行できます。
+
+```bash
+fvm flutter run
 ```
 
 ## 実際の使用例
@@ -144,26 +194,30 @@ flutter run
 ### CI/CD パイプラインでの使用
 
 ```yaml
-# GitHub Actions example
+# GitHub Actions
+- name: Setup FVM
+  uses: kuhnroyal/flutter-fvm-config-action@v1
+
 - name: Check Japanese hardcoded strings
-  run: dart run tools/find_japanese_hardcoded_strings.dart
+  run: fvm dart run tools/find_japanese_hardcoded_strings.dart
 
 - name: Check ARB key consistency
-  run: dart run tools/check_arb_keys.dart
+  run: fvm dart run tools/check_arb_keys.dart
 ```
 
-### プレコミットフックでの使用
+## スクリプトを使った品質チェック
 
 ```bash
-#!/bin/sh
-# Pre-commit hook
-dart run tools/find_japanese_hardcoded_strings.dart || exit 1
-dart run tools/check_arb_keys.dart || exit 1
+# 日本語ハードコード文字列をチェック
+fvm dart run tools/find_japanese_hardcoded_strings.dart
+
+# ARBキーの整合性をチェック
+fvm dart run tools/check_arb_keys.dart
 ```
 
 ## 貢献
 
-このプロジェクトへの貢献を歓迎します！以下の方法でご参加ください：
+このプロジェクトへの貢献を歓迎します！以下の方法でご参加ください。
 
 1. このリポジトリをフォーク
 2. 新しいブランチを作成 (`git checkout -b feature/amazing-feature`)
@@ -177,8 +231,4 @@ dart run tools/check_arb_keys.dart || exit 1
 
 ## 技術記事
 
-このツールに関する詳細な技術記事は[こちら](リンクを挿入)をご覧ください。
-
----
-
-**Flutter Localization Tools** - Flutter アプリの多言語化をより効率的に 🌍
+このツールに関する詳細な技術記事は[こちら](TODO: リンクを挿入)をご覧ください。
