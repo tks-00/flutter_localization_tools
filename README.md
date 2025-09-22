@@ -231,4 +231,5 @@ fvm dart run tools/check_arb_keys.dart
 
 ## 技術記事
 
-このツールに関する詳細な技術記事は[こちら](TODO: リンクを挿入)をご覧ください。
+このツールに関する詳細な技術記事は[こちら](https://zenn.dev/tks_00/articles/07cfa8532abc8b)をご覧ください。
+
